@@ -1,0 +1,64 @@
+#pragma once
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <utility>
+#include <tuple>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <array>
+#include <cassert>
+#include <cstdio>
+
+class Day
+{
+public:
+    virtual void run() = 0;
+    virtual bool sanity_check() = 0;
+    virtual ~Day() = default;
+
+protected:
+};
+
+#define DAY_CLASS(N)                                                           \
+    class Day##N : public Day                                                  \
+    {                                                                          \
+    public:                                                                    \
+        void run() override;                                                   \
+        bool sanity_check() override;                                          \
+                                                                               \
+    private:                                                                   \
+        const char* input_file = "../input/day" #N;                            \
+        const char* provided_file = "../input/day" #N "_provided";             \
+    }
+
+DAY_CLASS(1);
+DAY_CLASS(2);
+DAY_CLASS(3);
+DAY_CLASS(4);
+DAY_CLASS(5);
+DAY_CLASS(6);
+DAY_CLASS(7);
+DAY_CLASS(8);
+
+template <typename T>
+std::vector<T> input_tokens_to_T(std::ifstream& input)
+{
+    std::vector<T> v;
+    while (!input.eof())
+    {
+        T t;
+        input >> t;
+        v.push_back(t);
+    }
+    return v;
+}
+
+std::vector<std::string> input_to_lines(std::ifstream& input);
+std::vector<std::string> split(const std::string& s, const std::string& delim);
