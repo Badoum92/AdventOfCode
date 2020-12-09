@@ -6,14 +6,8 @@ using bags_t =
 static bool bag_lookup(const std::string& bag, const bags_t& bags,
                        std::unordered_set<std::string>& set)
 {
-    if (set.count(bag))
+    if (set.count(bag) || bag == "shinygold")
         return true;
-
-    if (bag == "shinygold")
-        return true;
-
-    if (bags.at(bag).size() == 0)
-        return false;
 
     for (const auto& [key, val] : bags.at(bag))
     {

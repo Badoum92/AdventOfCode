@@ -1,5 +1,6 @@
 #pragma once
 
+// Let me use sscanf msvc
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
@@ -32,7 +33,6 @@ protected:
     public:                                                                    \
         void run() override;                                                   \
         bool sanity_check() override;                                          \
-                                                                               \
     private:                                                                   \
         const char* input_file = "../input/day" #N;                            \
         const char* provided_file = "../input/day" #N "_provided";             \
@@ -46,6 +46,7 @@ DAY_CLASS(5);
 DAY_CLASS(6);
 DAY_CLASS(7);
 DAY_CLASS(8);
+DAY_CLASS(9);
 
 template <typename T>
 std::vector<T> input_tokens_to_T(std::ifstream& input)
