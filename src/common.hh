@@ -48,6 +48,7 @@ DAY_CLASS(7);
 DAY_CLASS(8);
 DAY_CLASS(9);
 DAY_CLASS(10);
+DAY_CLASS(11);
 
 template <typename T>
 std::vector<T> input_tokens_to_T(std::ifstream& input)
