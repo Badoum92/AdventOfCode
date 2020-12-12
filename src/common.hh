@@ -14,7 +14,9 @@
 #include <set>
 #include <unordered_set>
 #include <array>
+#include <numeric>
 #include <cassert>
+#include <cmath>
 #include <cstdio>
 
 class Day
@@ -49,6 +51,7 @@ DAY_CLASS(8);
 DAY_CLASS(9);
 DAY_CLASS(10);
 DAY_CLASS(11);
+DAY_CLASS(12);
 
 template <typename T>
 std::vector<T> input_tokens_to_T(std::ifstream& input)

@@ -26,6 +26,9 @@ static char get_new_char(unsigned x, unsigned y,
                          const std::vector<std::string>& v)
 {
     char cur = v[y][x];
+    if (cur == '.')
+        return cur;
+
     unsigned neighbours = count_neighbours(x, y, v);
     if (cur == 'L' && neighbours == 0)
     {
@@ -41,17 +44,12 @@ static char get_new_char(unsigned x, unsigned y,
 static unsigned step1(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto lines1 = input_to_lines(input);
-    auto lines2 = lines1;
-    bool chose = true;
+    auto cur = input_to_lines(input);
+    auto prev = cur;
 
     while (true)
     {
-        auto& cur = chose ? lines1 : lines2;
-        auto& prev = chose ? lines2 : lines1;
-        chose = !chose;
         bool changed = false;
-
         for (unsigned y = 0; y < cur.size(); ++y)
         {
             for (unsigned x = 0; x < cur[0].size(); ++x)
@@ -62,17 +60,15 @@ static unsigned step1(const char* input_file)
                 cur[y][x] = new_char;
             }
         }
-
         if (!changed)
             break;
+        std::swap(cur, prev);
     }
 
-    unsigned total = 0;
-    for (const auto& s : lines1)
-    {
-        total += std::count(begin(s), end(s), '#');
-    }
-    return total;
+    return std::accumulate(begin(cur), end(cur), 0,
+                           [&](int x, const std::string& s) {
+                               return x + std::count(begin(s), end(s), '#');
+                           });
 }
 
 static char find_in_direction(unsigned x, unsigned y, int dir_x, int dir_y,
@@ -108,6 +104,9 @@ static char get_new_char2(unsigned x, unsigned y,
                           const std::vector<std::string>& v)
 {
     char cur = v[y][x];
+    if (cur == '.')
+        return cur;
+
     unsigned neighbours = count_neighbours2(x, y, v);
     if (cur == 'L' && neighbours == 0)
     {
@@ -123,17 +122,12 @@ static char get_new_char2(unsigned x, unsigned y,
 static unsigned step2(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto lines1 = input_to_lines(input);
-    auto lines2 = lines1;
-    bool chose = true;
+    auto cur = input_to_lines(input);
+    auto prev = cur;
 
     while (true)
     {
-        auto& cur = chose ? lines1 : lines2;
-        auto& prev = chose ? lines2 : lines1;
-        chose = !chose;
         bool changed = false;
-
         for (unsigned y = 0; y < cur.size(); ++y)
         {
             for (unsigned x = 0; x < cur[0].size(); ++x)
@@ -144,17 +138,15 @@ static unsigned step2(const char* input_file)
                 cur[y][x] = new_char;
             }
         }
-
         if (!changed)
             break;
+        std::swap(cur, prev);
     }
 
-    unsigned total = 0;
-    for (const auto& s : lines1)
-    {
-        total += std::count(begin(s), end(s), '#');
-    }
-    return total;
+    return std::accumulate(begin(cur), end(cur), 0,
+                           [&](int x, const std::string& s) {
+                               return x + std::count(begin(s), end(s), '#');
+                           });
 }
 
 void Day11::run()
@@ -163,6 +155,7 @@ void Day11::run()
     std::cout << "    running sanity check...";
     if (!sanity_check())
         return;
+
     std::cout << "    step1: " << step1(input_file) << "\n";
     std::cout << "    step2: " << step2(input_file) << "\n\n";
 }
