@@ -4,35 +4,32 @@ struct Ship
 {
     int x = 0;
     int y = 0;
-    int angle = 0;
+    int direction = 0;
     // step2
     int wp_x = 10;
     int wp_y = 1;
 };
 
-void apply_instruction(char c, int val, Ship& s);
-void apply_f(int val, Ship& s);
+char directions[] = {'E', 'N', 'W', 'S'};
 
-void apply_f(int val, Ship& s)
+template<typename F>
+unsigned solve(F function, const char* input_file)
 {
-    switch (s.angle)
+    std::ifstream input(input_file);
+    auto lines = input_to_lines(input);
+    Ship s;
+    for (const auto& l : lines)
     {
-    case 0:
-        apply_instruction('E', val, s);
-        return;
-    case 90:
-        apply_instruction('N', val, s);
-        return;
-    case 180:
-        apply_instruction('W', val, s);
-        return;
-    case 270:
-        apply_instruction('S', val, s);
-        return;
-    default:
-        std::cerr << "wtf (apply_f)\n";
-        exit(2);
+        char c;
+        int val;
+        if (sscanf(l.c_str(), "%c%d", &c, &val) != 2)
+        {
+            std::cerr << "wtf (sscanf)\n";
+            exit(2);
+        }
+        function(c, val, s);
     }
+    return std::abs(s.x) + std::abs(s.y);
 }
 
 void apply_instruction(char c, int val, Ship& s)
@@ -52,13 +49,13 @@ void apply_instruction(char c, int val, Ship& s)
         s.x -= val;
         return;
     case 'L':
-        s.angle = ((s.angle + val) % 360 + 360) % 360;
+        s.direction = ((s.direction + (val / 90)) % 4 + 4) % 4;
         return;
     case 'R':
-        s.angle = ((s.angle - val) % 360 + 360) % 360;
+        apply_instruction('L', -val, s);
         return;
     case 'F':
-        apply_f(val, s);
+        apply_instruction(directions[s.direction], val, s);
         return;
     default:
         std::cerr << "wtf (apply_instruction)\n";
@@ -68,26 +65,13 @@ void apply_instruction(char c, int val, Ship& s)
 
 static unsigned step1(const char* input_file)
 {
-    std::ifstream input(input_file);
-    auto lines = input_to_lines(input);
-    Ship s;
-    for (const auto& l : lines)
-    {
-        char c;
-        int val;
-        if (sscanf(l.c_str(), "%c%d", &c, &val) != 2)
-        {
-            std::cerr << "wtf (sscanf)\n";
-            exit(2);
-        }
-        apply_instruction(c, val, s);
-    }
-    return std::abs(s.x) + std::abs(s.y);
+    return solve(apply_instruction, input_file);
 }
 
 void apply_instruction2(char c, int val, Ship& s)
 {
-    int tmp = s.wp_x;
+    int x = s.wp_x;
+    int y = s.wp_y;
     double angle = (val * 3.1415926535) / 180;
     switch (c)
     {
@@ -104,8 +88,8 @@ void apply_instruction2(char c, int val, Ship& s)
         s.wp_x -= val;
         return;
     case 'L':
-        s.wp_x = std::round(s.wp_x * std::cos(angle) - s.wp_y * std::sin(angle));
-        s.wp_y = std::round(tmp * std::sin(angle) + s.wp_y * std::cos(angle));
+        s.wp_x = std::round(x * std::cos(angle) - y * std::sin(angle));
+        s.wp_y = std::round(x * std::sin(angle) + y * std::cos(angle));
         return;
     case 'R':
         apply_instruction2('L', -val, s);
@@ -122,21 +106,7 @@ void apply_instruction2(char c, int val, Ship& s)
 
 static unsigned step2(const char* input_file)
 {
-    std::ifstream input(input_file);
-    auto lines = input_to_lines(input);
-    Ship s;
-    for (const auto& l : lines)
-    {
-        char c;
-        int val;
-        if (sscanf(l.c_str(), "%c%d", &c, &val) != 2)
-        {
-            std::cerr << "wtf (sscanf)\n";
-            exit(2);
-        }
-        apply_instruction2(c, val, s);
-    }
-    return std::abs(s.x) + std::abs(s.y);
+    return solve(apply_instruction2, input_file);
 }
 
 void Day12::run()
