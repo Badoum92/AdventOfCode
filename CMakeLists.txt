@@ -23,8 +23,11 @@ add_executable(aoc
     src/days/day13.cc
     src/days/day14.cc
     src/days/day15.cc
+    src/days/day16.cc
 )
 
 target_include_directories(aoc
     PRIVATE src
 )
+
+add_compile_definitions(_CRT_SECURE_NO_WARNINGS)

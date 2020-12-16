@@ -1,8 +1,5 @@
 #pragma once
 
-// Let me use sscanf msvc
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,6 +7,7 @@
 #include <string>
 #include <utility>
 #include <tuple>
+#include <map>
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
@@ -56,6 +54,7 @@ DAY_CLASS(12);
 DAY_CLASS(13);
 DAY_CLASS(14);
 DAY_CLASS(15);
+DAY_CLASS(16);
 
 template <typename T>
 std::vector<T> input_tokens_to_T(std::ifstream& input)
