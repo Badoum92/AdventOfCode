@@ -25,6 +25,7 @@ add_executable(aoc
     src/days/day15.cc
     src/days/day16.cc
     src/days/day17.cc
+    src/days/day18.cc
 )
 
 target_include_directories(aoc
