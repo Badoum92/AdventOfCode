@@ -18,6 +18,8 @@
 #include <cassert>
 #include <cmath>
 #include <cstdio>
+#include <regex>
+#include <optional>
 
 class Day
 {
@@ -58,6 +60,7 @@ DAY_CLASS(15);
 DAY_CLASS(16);
 DAY_CLASS(17);
 DAY_CLASS(18);
+DAY_CLASS(19);
 
 template <typename T>
 std::vector<T> input_tokens_to_T(std::ifstream& input)
