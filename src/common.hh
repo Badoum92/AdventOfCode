@@ -20,6 +20,8 @@
 #include <cstdio>
 #include <regex>
 #include <optional>
+#include <queue>
+#include <deque>
 
 class Day
 {
@@ -63,6 +65,7 @@ DAY_CLASS(18);
 DAY_CLASS(19);
 DAY_CLASS(20);
 DAY_CLASS(21);
+DAY_CLASS(22);
 
 template <typename T>
 std::vector<T> input_tokens_to_T(std::ifstream& input)
