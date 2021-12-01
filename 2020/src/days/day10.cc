@@ -3,7 +3,7 @@
 static unsigned step1(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto numbers = input_tokens_to_T<unsigned>(input);
+    auto numbers = input_to_tokens<unsigned>(input);
     std::sort(begin(numbers), end(numbers));
 
     unsigned one = numbers[0] == 1 ? 1 : 0;
@@ -54,7 +54,7 @@ static uint64_t step2_rec(unsigned i, const std::vector<unsigned>& numbers,
 static uint64_t step2(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto numbers = input_tokens_to_T<unsigned>(input);
+    auto numbers = input_to_tokens<unsigned>(input);
     numbers.push_back(0);
     std::vector<uint64_t> cache(numbers.size(), 0);
     std::sort(begin(numbers), end(numbers));

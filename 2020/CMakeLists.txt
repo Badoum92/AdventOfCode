@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(advent_of_code)
+project(advent_of_code_2020)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -O3")

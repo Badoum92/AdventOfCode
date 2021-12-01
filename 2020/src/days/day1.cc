@@ -3,7 +3,7 @@
 static unsigned step1(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto data = input_tokens_to_T<int>(input);
+    auto data = input_to_tokens<int>(input);
 
     for (unsigned i = 0; i < data.size() - 1; ++i)
     {
@@ -22,7 +22,7 @@ static unsigned step1(const char* input_file)
 static unsigned step2(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto data = input_tokens_to_T<int>(input);
+    auto data = input_to_tokens<int>(input);
 
     for (unsigned i = 0; i < data.size() - 2; ++i)
     {

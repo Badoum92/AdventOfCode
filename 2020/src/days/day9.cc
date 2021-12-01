@@ -25,14 +25,14 @@ static unsigned find_weak_number_index(const std::vector<uint64_t>& numbers)
 static uint64_t step1(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto numbers = input_tokens_to_T<uint64_t>(input);
+    auto numbers = input_to_tokens<uint64_t>(input);
     return numbers[find_weak_number_index(numbers)];
 }
 
 static uint64_t step2(const char* input_file)
 {
     std::ifstream input(input_file);
-    auto numbers = input_tokens_to_T<uint64_t>(input);
+    auto numbers = input_to_tokens<uint64_t>(input);
     uint64_t number = numbers[find_weak_number_index(numbers)];
 
     unsigned i = 0;
