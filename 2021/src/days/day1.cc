@@ -42,7 +42,7 @@ void Day1::run()
     auto t0 = std::chrono::steady_clock::now();
     auto s1 = step1("../input/day1");
     auto t1 = std::chrono::steady_clock::now();
-    auto s2 = step1("../input/day1");
+    auto s2 = step2("../input/day1");
     auto t2 = std::chrono::steady_clock::now();
 
     auto t_s1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();

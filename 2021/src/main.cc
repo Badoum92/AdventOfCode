@@ -5,7 +5,7 @@ int main(int argc, char** argv)
     // clang-format off
     std::unique_ptr<Day> days[] = {
         std::make_unique<Day1>(),
-        // std::make_unique<Day2>(),
+        std::make_unique<Day2>(),
         // std::make_unique<Day3>(),
         // std::make_unique<Day4>(),
         // std::make_unique<Day5>(),

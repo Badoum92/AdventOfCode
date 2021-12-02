@@ -44,7 +44,7 @@ public:
     }
 
 DAY_CLASS(1);
-// DAY_CLASS(2);
+DAY_CLASS(2);
 // DAY_CLASS(3);
 // DAY_CLASS(4);
 // DAY_CLASS(5);
