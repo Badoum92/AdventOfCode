@@ -8,7 +8,7 @@ add_executable(aoc
     src/main.cc
     src/days/day1.cc
     src/days/day2.cc
-    # src/days/day3.cc
+    src/days/day3.cc
     # src/days/day4.cc
     # src/days/day5.cc
     # src/days/day6.cc

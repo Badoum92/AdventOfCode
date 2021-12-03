@@ -22,6 +22,7 @@
 #include <optional>
 #include <queue>
 #include <deque>
+#include <bitset>
 
 class Day
 {
