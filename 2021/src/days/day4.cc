@@ -1,49 +1,44 @@
 #include "common.hh"
 
+constexpr uint8_t MARKED = 255;
+
 struct Board
 {
-    std::array<bool, 25> marked;
     std::array<uint8_t, 25> numbers;
     std::array<uint8_t, 5> rows;
     std::array<uint8_t, 5> cols;
-    std::unordered_map<uint8_t, std::pair<uint8_t, uint8_t>> number_to_pos;
+    uint32_t total = 0;
     bool won = false;
 
     void add_number(uint8_t number, size_t x, size_t y)
     {
-        number_to_pos[number] = std::make_pair(x, y);
         numbers[y * 5 + x] = number;
+        total += number;
     }
 
     bool mark_number(uint8_t number)
     {
-        auto it = number_to_pos.find(number);
-        if (it == number_to_pos.end())
+        for (size_t y = 0; y < 5; ++y)
         {
-            return won;
-        }
-        auto [x, y] = it->second;
-        if (!marked[y * 5 + x])
-        {
-            marked[y * 5 + x] = true;
-            ++rows[y];
-            ++cols[x];
-            won = won || rows[y] == 5 || cols[x] == 5;
+            for (size_t x = 0; x < 5; ++x)
+            {
+                if (numbers[y * 5 + x] == number)
+                {
+                    numbers[y * 5 + x] = MARKED;
+                    total -= number;
+                    uint8_t row = ++rows[y];
+                    uint8_t col = ++cols[x];
+                    won = won || row == 5 || col == 5;
+                    return won;
+                }
+            }
         }
         return won;
     }
 
     uint32_t score(uint8_t number)
     {
-        uint32_t score = 0;
-        for (size_t i = 0; i < 25; ++i)
-        {
-            if (!marked[i])
-            {
-                score += numbers[i];
-            }
-        }
-        return score * number;
+        return total * number;
     }
 };
 
