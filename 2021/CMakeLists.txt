@@ -13,7 +13,7 @@ add_executable(aoc
     src/days/day5.cc
     src/days/day6.cc
     src/days/day7.cc
-    # src/days/day8.cc
+    src/days/day8.cc
     # src/days/day9.cc
     # src/days/day10.cc
     # src/days/day11.cc
