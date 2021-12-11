@@ -14,7 +14,7 @@ int main(int argc, char** argv)
         std::make_unique<Day8>(),
         std::make_unique<Day9>(),
         std::make_unique<Day10>(),
-        // std::make_unique<Day11>(),
+        std::make_unique<Day11>(),
         // std::make_unique<Day12>(),
         // std::make_unique<Day13>(),
         // std::make_unique<Day14>(),

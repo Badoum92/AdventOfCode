@@ -22,6 +22,7 @@
 #include <memory>
 #include <chrono>
 #include <bitset>
+#include <functional>
 
 #include <cassert>
 #include <cmath>
@@ -54,7 +55,7 @@ DAY_CLASS(7);
 DAY_CLASS(8);
 DAY_CLASS(9);
 DAY_CLASS(10);
-// DAY_CLASS(11);
+DAY_CLASS(11);
 // DAY_CLASS(12);
 // DAY_CLASS(13);
 // DAY_CLASS(14);
