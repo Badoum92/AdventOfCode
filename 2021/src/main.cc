@@ -16,8 +16,8 @@ int main(int argc, char** argv)
         std::make_unique<Day10>(),
         std::make_unique<Day11>(),
         std::make_unique<Day12>(),
-        // std::make_unique<Day13>(),
-        // std::make_unique<Day14>(),
+        std::make_unique<Day13>(),
+        std::make_unique<Day14>(),
         // std::make_unique<Day15>(),
         // std::make_unique<Day16>(),
         // std::make_unique<Day17>(),
@@ -32,18 +32,25 @@ int main(int argc, char** argv)
     };
     // clang-format on
 
-    if (argc == 1)
+    try
     {
-        for (const auto& d : days)
+        if (argc == 1)
         {
-            d->run();
+            for (const auto& d : days)
+            {
+                d->run();
+            }
+        }
+        else
+        {
+            for (int i = 1; i < argc; ++i)
+            {
+                days[std::atoi(argv[i]) - 1]->run();
+            }
         }
     }
-    else
+    catch (const std::exception& e)
     {
-        for (int i = 1; i < argc; ++i)
-        {
-            days[std::atoi(argv[i]) - 1]->run();
-        }
+        std::cerr << "Uncaught exception: " << e.what() << "\n";
     }
 }
