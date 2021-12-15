@@ -129,15 +129,6 @@ static uint32_t step1(const char* input_file)
     auto [points, folds] = parse_input(input);
 
     return count_points(fold(points, folds[0]));
-
-    /* for (const auto& p : points)
-    {
-        std::cout << p.x << ", " << p.y << "\n";
-    }
-    for (const auto& f : folds)
-    {
-        std::cout << f.axis << " " << f.index << "\n";
-    } */
 }
 
 static uint32_t step2(const char* input_file)
