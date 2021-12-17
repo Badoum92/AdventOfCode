@@ -288,6 +288,7 @@ static uint64_t step2(const char* input_file)
     std::ifstream input(input_file);
     auto bits = parse_input(input);
     auto packets = parse_packets(bits);
+    packets[0].print();
     return eval_packet(packets[0]);
 }
 

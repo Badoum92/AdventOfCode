@@ -22,7 +22,7 @@ add_executable(aoc
     src/days/day14.cc
     src/days/day15.cc
     src/days/day16.cc
-    # src/days/day17.cc
+    src/days/day17.cc
     # src/days/day18.cc
     # src/days/day19.cc
     # src/days/day20.cc
