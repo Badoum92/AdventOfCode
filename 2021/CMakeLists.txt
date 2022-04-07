@@ -4,6 +4,10 @@ project(advent_of_code_2021)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -Wall -Wextra -O3")
 
+if (${CMAKE_GENERATOR} STREQUAL "Ninja")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics -fansi-escape-codes")
+endif ()
+
 add_executable(aoc
     src/main.cc
     src/days/day1.cc
@@ -23,8 +27,8 @@ add_executable(aoc
     src/days/day15.cc
     src/days/day16.cc
     src/days/day17.cc
-    # src/days/day18.cc
-    # src/days/day19.cc
+    src/days/day18.cc
+    src/days/day19.cc
     # src/days/day20.cc
     # src/days/day21.cc
     # src/days/day22.cc
