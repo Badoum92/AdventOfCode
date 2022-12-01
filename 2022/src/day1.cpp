@@ -1,12 +1,12 @@
 #include "common.h"
 
-#include <string>
+#include <array>
 
-const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {123};
-uint64_t provided_expected2[] = {124};
+const char* provided_paths[] = {"input/day1_provided"};
+uint64_t provided_expected1[] = {24000};
+uint64_t provided_expected2[] = {45000};
 
-const char* real_input = "input/day0";
+const char* real_input = "input/day1";
 
 using Input = std::vector<std::string>;
 
@@ -17,12 +17,41 @@ Input parse_input(const char* path)
 
 uint64_t step1(const Input& input)
 {
-    return std::stoull(input[0]);
+    uint64_t max = 0;
+    uint64_t current = 0;
+    for (const auto& s : input)
+    {
+        if (s.empty())
+        {
+            max = std::max(current, max);
+            current = 0;
+        }
+        else
+        {
+            current += std::stoull(s);
+        }
+    }
+    max = std::max(current, max);
+    return max;
 }
 
 uint64_t step2(const Input& input)
 {
-    return std::stoull(input[0]) + 1;
+    std::array<uint64_t, 4> max = {0, 0, 0, 0};
+    for (const auto& s : input)
+    {
+        if (s.empty())
+        {
+            std::sort(max.begin(), max.end());
+            max[0] = 0;
+        }
+        else
+        {
+            max[0] += std::stoull(s);
+        }
+    }
+    std::sort(max.begin(), max.end());
+    return max[1] + max[2] + max[3];
 }
 
 int main()
