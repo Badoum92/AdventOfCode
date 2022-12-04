@@ -3,8 +3,8 @@
 #include <string>
 
 const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {123};
-uint64_t provided_expected2[] = {124};
+uint64_t provided_expected1[] = {0};
+uint64_t provided_expected2[] = {0};
 
 const char* real_input = "input/day0";
 
@@ -17,12 +17,12 @@ Input parse_input(const char* path)
 
 uint64_t step1(const Input& input)
 {
-    return std::stoull(input[0]);
+    return 0;
 }
 
 uint64_t step2(const Input& input)
 {
-    return std::stoull(input[0]) + 1;
+    return 0;
 }
 
 int main()
