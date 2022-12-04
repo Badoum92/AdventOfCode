@@ -2,27 +2,74 @@
 
 #include <string>
 
-const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {123};
-uint64_t provided_expected2[] = {124};
+const char* provided_paths[] = {"input/day4_provided"};
+uint64_t provided_expected1[] = {2};
+uint64_t provided_expected2[] = {4};
 
-const char* real_input = "input/day0";
+const char* real_input = "input/day4";
 
-using Input = std::vector<std::string>;
+struct ElfPair
+{
+    uint64_t begin1;
+    uint64_t end1;
+
+    uint64_t begin2;
+    uint64_t end2;
+};
+
+using Input = std::vector<ElfPair>;
 
 Input parse_input(const char* path)
 {
-    return input_to_lines(path);
+    Input ret;
+    auto lines = input_to_lines(path);
+    ret.resize(lines.size());
+    for (size_t i = 0; i < lines.size(); ++i)
+    {
+        const auto& line = lines[i];
+        auto& pair = ret[i];
+        sscanf(line.c_str(), "%llu-%llu,%llu-%llu", &pair.begin1, &pair.end1, &pair.begin2, &pair.end2);
+    }
+    return ret;
+}
+
+bool full_overlap(const ElfPair& pair)
+{
+    bool a = pair.begin1 <= pair.begin2 && pair.end1 >= pair.end2;
+    bool b = pair.begin2 <= pair.begin1 && pair.end2 >= pair.end1;
+    return a || b;
+}
+
+bool between(uint64_t value, uint64_t a, uint64_t b)
+{
+    return a <= value && value <= b;
+}
+
+bool any_overlap(const ElfPair& pair)
+{
+    bool a = between(pair.begin1, pair.begin2, pair.end2) || between(pair.end1, pair.begin2, pair.end2);
+    bool b = between(pair.begin2, pair.begin1, pair.end1) || between(pair.end2, pair.begin1, pair.end1);
+    return a || b;
 }
 
 uint64_t step1(const Input& input)
 {
-    return std::stoull(input[0]);
+    uint64_t count = 0;
+    for (const auto& pair : input)
+    {
+        count += full_overlap(pair);
+    }
+    return count;
 }
 
 uint64_t step2(const Input& input)
 {
-    return std::stoull(input[0]) + 1;
+    uint64_t count = 0;
+    for (const auto& pair : input)
+    {
+        count += any_overlap(pair);
+    }
+    return count;
 }
 
 int main()
