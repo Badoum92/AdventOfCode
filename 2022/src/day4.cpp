@@ -40,16 +40,9 @@ bool full_overlap(const ElfPair& pair)
     return a || b;
 }
 
-bool between(uint64_t value, uint64_t a, uint64_t b)
-{
-    return a <= value && value <= b;
-}
-
 bool any_overlap(const ElfPair& pair)
 {
-    bool a = between(pair.begin1, pair.begin2, pair.end2) || between(pair.end1, pair.begin2, pair.end2);
-    bool b = between(pair.begin2, pair.begin1, pair.end1) || between(pair.end2, pair.begin1, pair.end1);
-    return a || b;
+    return pair.end1 >= pair.begin2 && pair.begin1 <= pair.end2;
 }
 
 uint64_t step1(const Input& input)
