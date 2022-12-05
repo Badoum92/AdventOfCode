@@ -1,7 +1,5 @@
 #include "common.h"
 
-#include <string>
-
 const char* provided_paths[] = {"input/day5_provided"};
 const char* provided_expected1[] = {"CMZ"};
 const char* provided_expected2[] = {"MCD"};
@@ -17,31 +15,25 @@ struct MoveOperation
 
 struct Input
 {
-    std::vector<std::vector<char>> stacks;
+    std::array<std::vector<char>, 10> stacks;
     std::vector<MoveOperation> moves;
 };
 
 Input parse_input(const char* path)
 {
     Input input;
-    input.stacks.resize(10);
     auto lines = input_to_lines(path);
 
     size_t i = 0;
-    for (; i < lines.size(); ++i)
+    for (; lines[i][1] != '1'; ++i)
     {
         const auto& line = lines[i];
-        if (line[1] == '1')
-        {
-            i += 2;
-            break;
-        }
-
         for (size_t j = 0; j < 10; ++j)
         {
-            if (2 + j * 4 < line.size() && line[1 + j * 4] != ' ')
+            size_t index = 1 + j * 4;
+            if (index < line.size() - 1 && line[index] != ' ')
             {
-                input.stacks[j + 1].push_back(line[1 + j * 4]);
+                input.stacks[j + 1].push_back(line[index]);
             }
         }
     }
@@ -61,17 +53,8 @@ Input parse_input(const char* path)
     return input;
 }
 
-std::string step1(Input& input)
+std::string string_from_stacks(const Input& input)
 {
-    for (const auto& move : input.moves)
-    {
-        for (uint32_t i = 0; i < move.amount; ++i)
-        {
-            input.stacks[move.to].push_back(input.stacks[move.from].back());
-            input.stacks[move.from].pop_back();
-        }
-    }
-
     std::string res;
     for (const auto& stack : input.stacks)
     {
@@ -83,29 +66,30 @@ std::string step1(Input& input)
     return res;
 }
 
-std::string step2(Input& input)
+std::string step1(Input input)
 {
     for (const auto& move : input.moves)
     {
-        for (uint32_t i = 0; i < move.amount; ++i)
-        {
-            input.stacks[move.to].push_back(input.stacks[move.from][input.stacks[move.from].size() - (move.amount - i)]);
-        }
-        for (uint32_t i = 0; i < move.amount; ++i)
-        {
-            input.stacks[move.from].pop_back();
-        }
-    }
+        auto& from = input.stacks[move.from];
+        auto& to = input.stacks[move.to];
 
-    std::string res;
-    for (const auto& stack : input.stacks)
-    {
-        if (!stack.empty())
-        {
-            res += stack.back();
-        }
+        to.insert(to.end(), from.rbegin(), from.rbegin() + move.amount);
+        from.erase(from.end() - move.amount, from.end());
     }
-    return res;
+    return string_from_stacks(input);
+}
+
+std::string step2(Input input)
+{
+    for (const auto& move : input.moves)
+    {
+        auto& from = input.stacks[move.from];
+        auto& to = input.stacks[move.to];
+
+        to.insert(to.end(), from.end() - move.amount, from.end());
+        from.erase(from.end() - move.amount, from.end());
+    }
+    return string_from_stacks(input);
 }
 
 int main()
@@ -114,14 +98,13 @@ int main()
     {
         Input input = parse_input(provided_paths[i]);
         auto [res1, time1] = time_function(step1, input);
-        input = parse_input(provided_paths[i]);
         auto [res2, time2] = time_function(step2, input);
 
-        printf("Provided input #%zu:\n", i);
-        printf("    Step1: Expected: %s  |  Result: %s  |  Time: %llu ms  |  %s\n", provided_expected1[i], res1.c_str(),
-               time1, res1 == provided_expected1[i] ? "OK" : "KO");
-        printf("    Step2: Expected: %s  |  Result: %s  |  Time: %llu ms  |  %s\n", provided_expected2[i], res2.c_str(),
-               time2, res2 == provided_expected2[i] ? "OK" : "KO");
+        std::cout << "Provided input #" << i << "\n";
+        std::cout << "    Step1: Expected: " << provided_expected1[i] << "  |  Result: " << res1
+                  << "  |  Time: " << time1 << "  |  " << (res1 == provided_expected1[i] ? "OK" : "KO") << "\n";
+        std::cout << "    Step2: Expected: " << provided_expected2[i] << "  |  Result: " << res2
+                  << "  |  Time: " << time2 << "  |  " << (res2 == provided_expected2[i] ? "OK" : "KO") << "\n";
 
         if (res1 != provided_expected1[i] || res2 != provided_expected2[i])
         {
@@ -131,9 +114,8 @@ int main()
 
     Input input = parse_input(real_input);
     auto [res1, time1] = time_function(step1, input);
-    input = parse_input(real_input);
     auto [res2, time2] = time_function(step2, input);
-    printf("\n=================================\n");
-    printf("Step1: Result: %s  |  Time: %llu ms\n", res1.c_str(), time1);
-    printf("Step2: Result: %s  |  Time: %llu ms\n", res2.c_str(), time2);
+    std::cout << "\n=================================\n";
+    std::cout << "Step1: Result: " << res1 << "  |  Time: " << time1 << " ms\n";
+    std::cout << "Step2: Result: " << res2 << "  |  Time: " << time2 << " ms\n";
 }

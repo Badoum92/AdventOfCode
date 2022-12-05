@@ -1,7 +1,5 @@
 #include "common.h"
 
-#include <string>
-
 const char* provided_paths[] = {"input/day2_provided"};
 uint64_t provided_expected1[] = {15};
 uint64_t provided_expected2[] = {12};
@@ -63,11 +61,11 @@ int main()
         auto [res1, time1] = time_function(step1, input);
         auto [res2, time2] = time_function(step2, input);
 
-        printf("Provided input #%zu:\n", i);
-        printf("    Step1: Expected: %llu  |  Result: %llu  |  Time: %llu ms  |  %s\n", provided_expected1[i], res1,
-               time1, res1 == provided_expected1[i] ? "OK" : "KO");
-        printf("    Step2: Expected: %llu  |  Result: %llu  |  Time: %llu ms  |  %s\n", provided_expected2[i], res2,
-               time2, res2 == provided_expected2[i] ? "OK" : "KO");
+        std::cout << "Provided input #" << i << "\n";
+        std::cout << "    Step1: Expected: " << provided_expected1[i] << "  |  Result: " << res1
+                  << "  |  Time: " << time1 << "  |  " << (res1 == provided_expected1[i] ? "OK" : "KO") << "\n";
+        std::cout << "    Step2: Expected: " << provided_expected2[i] << "  |  Result: " << res2
+                  << "  |  Time: " << time2 << "  |  " << (res2 == provided_expected2[i] ? "OK" : "KO") << "\n";
 
         if (res1 != provided_expected1[i] || res2 != provided_expected2[i])
         {
@@ -78,7 +76,7 @@ int main()
     Input input = parse_input(real_input);
     auto [res1, time1] = time_function(step1, input);
     auto [res2, time2] = time_function(step2, input);
-    printf("\n=================================\n");
-    printf("Step1: Result: %llu  |  Time: %llu ms\n", res1, time1);
-    printf("Step2: Result: %llu  |  Time: %llu ms\n", res2, time2);
+    std::cout << "\n=================================\n";
+    std::cout << "Step1: Result: " << res1 << "  |  Time: " << time1 << " ms\n";
+    std::cout << "Step2: Result: " << res2 << "  |  Time: " << time2 << " ms\n";
 }

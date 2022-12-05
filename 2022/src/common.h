@@ -5,10 +5,12 @@
 #include <chrono>
 #include <string>
 #include <vector>
+#include <array>
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
+#include <iostream>
 
 template <typename F, typename... Args>
 inline auto time_function(const F& function, Args&&... args)
