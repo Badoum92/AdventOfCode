@@ -1,25 +1,62 @@
 #include "common.h"
 
-const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {0};
-uint64_t provided_expected2[] = {0};
+#include <deque>
 
-const char* real_input = "input/day0";
+const char* provided_paths[] = {"input/day6_provided"};
+uint64_t provided_expected1[] = {7};
+uint64_t provided_expected2[] = {19};
 
-using Input = std::vector<std::string>;
+const char* real_input = "input/day6";
+
+using Input = std::string;
 
 Input parse_input(const char* path)
 {
-    return input_to_lines(path);
+    return input_to_lines(path)[0];
+}
+
+bool no_duplicates(const std::string& str, size_t index, size_t size)
+{
+    for (size_t i = index; i < index + size; ++i)
+    {
+        for (size_t j = index; j < index + size; ++j)
+        {
+            if (i == j)
+            {
+                continue;
+            }
+            if (str[i] == str[j])
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 uint64_t step1(const Input& input)
 {
+    size_t size = 4;
+    for (size_t i = 0; i < input.size(); ++i)
+    {
+        if (no_duplicates(input, i, size))
+        {
+            return i + size;
+        }
+    }
     return 0;
 }
 
 uint64_t step2(const Input& input)
 {
+    size_t size = 14;
+    for (size_t i = 0; i < input.size(); ++i)
+    {
+        if (no_duplicates(input, i, size))
+        {
+            return i + size;
+        }
+    }
     return 0;
 }
 
