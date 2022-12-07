@@ -1,7 +1,5 @@
 #include "common.h"
 
-#include <deque>
-
 const char* provided_paths[] = {"input/day6_provided"};
 uint64_t provided_expected1[] = {7};
 uint64_t provided_expected2[] = {19};

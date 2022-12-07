@@ -42,7 +42,7 @@ inline std::vector<std::string> input_to_lines(const char* path)
     std::string s;
     while (std::getline(input, s))
     {
-        v.push_back(s);
+        v.push_back(std::move(s));
     }
     return v;
 }
@@ -57,7 +57,7 @@ inline std::vector<std::string> split(const std::string& s, const std::string& d
         delim_idx = s.find(delim, cur_idx);
         std::string sub = s.substr(cur_idx, delim_idx - cur_idx);
         if (!sub.empty())
-            v.push_back(sub);
+            v.push_back(std::move(sub));
         cur_idx = delim_idx + delim.size();
     }
     return v;
