@@ -1,26 +1,151 @@
 #include "common.h"
 
-const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {0};
-uint64_t provided_expected2[] = {0};
+const char* provided_paths[] = {"input/day9_provided", "input/day9_provided2"};
+uint64_t provided_expected1[] = {13, 88};
+uint64_t provided_expected2[] = {1, 36};
 
-const char* real_input = "input/day0";
+const char* real_input = "input/day9";
 
-using Input = std::vector<std::string>;
+struct Move
+{
+    char direction;
+    uint8_t amount;
+};
+
+using Input = std::vector<Move>;
+using Position = std::pair<int32_t, int32_t>;
+
+template <>
+struct std::hash<Position>
+{
+    size_t operator()(const Position& pos) const
+    {
+        return pos.first ^ pos.second;
+    }
+};
+
+std::ostream& operator<<(std::ostream& os, const Position& pos)
+{
+    return os << "[" << pos.first << ", " << pos.second << "]";
+}
 
 Input parse_input(const char* path)
 {
-    return input_to_lines(path);
+    auto lines = input_to_lines(path);
+    Input input;
+    input.reserve(lines.size());
+    for (const auto& line : lines)
+    {
+        auto split_line = split(line, " ");
+        Move move{line[0], uint8_t(std::stoi(split_line[1]))};
+        input.push_back(move);
+    }
+    return input;
+}
+
+void move_knot(Position& pos, char direction)
+{
+    switch (direction)
+    {
+    case 'L':
+        pos.first -= 1;
+        return;
+    case 'R':
+        pos.first += 1;
+        return;
+    case 'D':
+        pos.second -= 1;
+        return;
+    case 'U':
+        pos.second += 1;
+        return;
+    }
+}
+
+bool adjust_pos(const Position& head_pos, const Position& tail_pos, Position& result_knot)
+{
+    if (head_pos.first - tail_pos.first == 2)
+    {
+        result_knot.first = head_pos.first - 1;
+        result_knot.second = head_pos.second;
+        return true;
+    }
+    else if (head_pos.first - tail_pos.first == -2)
+    {
+        result_knot.first = head_pos.first + 1;
+        result_knot.second = head_pos.second;
+        return true;
+    }
+    else if (head_pos.second - tail_pos.second == 2)
+    {
+        result_knot.first = head_pos.first;
+        result_knot.second = head_pos.second - 1;
+        return true;
+    }
+    else if (head_pos.second - tail_pos.second == -2)
+    {
+        result_knot.first = head_pos.first;
+        result_knot.second = head_pos.second + 1;
+        return true;
+    }
+    return false;
+}
+
+uint64_t solve(const Input& input, size_t size)
+{
+    std::unordered_set<Position> tail_positions;
+    std::vector<Position> knots(size, std::make_pair(0, 0));
+    tail_positions.insert(knots[size - 1]);
+
+    for (const auto& move : input)
+    {
+        for (uint8_t i = 0; i < move.amount; ++i)
+        {
+            move_knot(knots[0], move.direction);
+            if (adjust_pos(knots[0], knots[1], knots[1]))
+            {
+                for (size_t i = 2; i > size; ++i)
+                {
+                    adjust_pos(knots[i - 1], knots[i], knots[i]);
+                }
+                tail_positions.insert(knots[size - 1]);
+            }
+
+            for (size_t i = 0; i < size; ++i)
+            {
+                std::cout << "[" << i << "] = " << knots[i] << "\n";
+            }
+            std::cout << "= = =\n";
+        }
+    }
+
+    for (size_t y = 0; y < 21; ++y)
+    {
+        for (size_t x = 0; x < 26; ++x)
+        {
+            if (tail_positions.contains(std::make_pair(x, y)))
+            {
+                std::cout << "#";
+            }
+            else
+            {
+                std::cout << ".";
+            }
+        }
+        std::cout << "\n";
+    }
+
+    return tail_positions.size();
 }
 
 uint64_t step1(const Input& input)
 {
-    return 0;
+    return solve(input, 2);
 }
 
 uint64_t step2(const Input& input)
 {
-    return 0;
+    return solve(input, 10);
 }
 
 int main()

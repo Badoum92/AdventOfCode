@@ -130,9 +130,9 @@ uint64_t lines_of_sight(const Input& input, int x, int y)
 uint64_t step2(const Input& input)
 {
     size_t max = 0;
-    for (int y = 0; y < input.size(); ++y)
+    for (int y = 0; y < int(input.size()); ++y)
     {
-        for (int x = 0; x < input[0].size(); ++x)
+        for (int x = 0; x < int(input[0].size()); ++x)
         {
             uint64_t score = lines_of_sight(input, x, y);
             if (score > max)
