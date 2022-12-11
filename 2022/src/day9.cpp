@@ -64,31 +64,15 @@ void move_knot(Position& pos, char direction)
 
 bool adjust_pos(const Position& head_pos, const Position& tail_pos, Position& result_knot)
 {
-    if (head_pos.first - tail_pos.first == 2)
+    int32_t first_diff = (head_pos.first - tail_pos.first) / 2;
+    int32_t second_diff = (head_pos.second - tail_pos.second) / 2;
+    if (first_diff == 0 && second_diff == 0)
     {
-        result_knot.first = head_pos.first - 1;
-        result_knot.second = head_pos.second;
-        return true;
+        return false;
     }
-    else if (head_pos.first - tail_pos.first == -2)
-    {
-        result_knot.first = head_pos.first + 1;
-        result_knot.second = head_pos.second;
-        return true;
-    }
-    else if (head_pos.second - tail_pos.second == 2)
-    {
-        result_knot.first = head_pos.first;
-        result_knot.second = head_pos.second - 1;
-        return true;
-    }
-    else if (head_pos.second - tail_pos.second == -2)
-    {
-        result_knot.first = head_pos.first;
-        result_knot.second = head_pos.second + 1;
-        return true;
-    }
-    return false;
+    result_knot.first = head_pos.first + (first_diff < 0 ? 1 : -1) * (first_diff != 0);
+    result_knot.second = head_pos.second + (second_diff < 0 ? 1 : -1) * (second_diff != 0);
+    return true;
 }
 
 uint64_t solve(const Input& input, size_t size)
@@ -104,35 +88,13 @@ uint64_t solve(const Input& input, size_t size)
             move_knot(knots[0], move.direction);
             if (adjust_pos(knots[0], knots[1], knots[1]))
             {
-                for (size_t i = 2; i > size; ++i)
+                for (size_t i = 2; i < size; ++i)
                 {
                     adjust_pos(knots[i - 1], knots[i], knots[i]);
                 }
                 tail_positions.insert(knots[size - 1]);
             }
-
-            for (size_t i = 0; i < size; ++i)
-            {
-                std::cout << "[" << i << "] = " << knots[i] << "\n";
-            }
-            std::cout << "= = =\n";
         }
-    }
-
-    for (size_t y = 0; y < 21; ++y)
-    {
-        for (size_t x = 0; x < 26; ++x)
-        {
-            if (tail_positions.contains(std::make_pair(x, y)))
-            {
-                std::cout << "#";
-            }
-            else
-            {
-                std::cout << ".";
-            }
-        }
-        std::cout << "\n";
     }
 
     return tail_positions.size();
@@ -154,6 +116,7 @@ int main()
     {
         Input input = parse_input(provided_paths[i]);
         auto [res1, time1] = time_function(step1, input);
+        std::cout << "==================\n";
         auto [res2, time2] = time_function(step2, input);
 
         std::cout << "Provided input #" << i << "\n";
