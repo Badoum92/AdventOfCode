@@ -24,11 +24,6 @@ struct std::hash<Position>
     }
 };
 
-std::ostream& operator<<(std::ostream& os, const Position& pos)
-{
-    return os << "[" << pos.first << ", " << pos.second << "]";
-}
-
 Input parse_input(const char* path)
 {
     auto lines = input_to_lines(path);
