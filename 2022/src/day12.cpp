@@ -1,24 +1,57 @@
 #include "common.h"
 
-const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {0};
-uint64_t provided_expected2[] = {0};
+const char* provided_paths[] = {"input/day12_provided"};
+int64_t provided_expected1[] = {31};
+int64_t provided_expected2[] = {0};
 
-const char* real_input = "input/day0";
+const char* real_input = "input/day12";
 
-using Input = std::vector<std::string>;
+struct Position
+{
+    int64_t x;
+    int64_t y;
+};
+
+struct Input
+{
+    std::vector<std::string> grid;
+    Position pos;
+};
 
 Input parse_input(const char* path)
 {
-    return input_to_lines(path);
+    Input input;
+    input.grid = input_to_lines(path);
+    for (size_t y = 0; y < input.grid.size(); ++y)
+    {
+        for (size_t x = 0; x < input.grid[0].size(); ++x)
+        {
+            if (input.grid[y][x] == 'S')
+            {
+                input.pos = {int64_t(x), int64_t(y)};
+                return input;
+            }
+        }
+    }
+    return input;
 }
 
-uint64_t step1(const Input& input)
+int64_t move(const std::vector<std::string>& grid, std::vector<std::vector<bool>>& visited, const Position& position)
 {
-    return 0;
+
 }
 
-uint64_t step2(const Input& input)
+int64_t step1(const Input& input)
+{
+    std::vector<std::vector<bool>> visited(input.grid.size());
+    for (auto& v : visited)
+    {
+        v.resize(input.grid[0].size());
+    }
+    visited[input.pos.y][input.pos.x] = true;
+}
+
+int64_t step2(const Input& input)
 {
     return 0;
 }
