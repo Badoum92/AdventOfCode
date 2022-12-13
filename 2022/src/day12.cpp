@@ -1,21 +1,25 @@
 #include "common.h"
 
+#include <deque>
+#include <deque>
+
 const char* provided_paths[] = {"input/day12_provided"};
-int64_t provided_expected1[] = {31};
-int64_t provided_expected2[] = {0};
+uint32_t provided_expected1[] = {31};
+uint32_t provided_expected2[] = {29};
 
 const char* real_input = "input/day12";
 
 struct Position
 {
-    int64_t x;
-    int64_t y;
+    uint32_t x;
+    uint32_t y;
 };
 
 struct Input
 {
     std::vector<std::string> grid;
-    Position pos;
+    Position start_pos;
+    Position end_pos;
 };
 
 Input parse_input(const char* path)
@@ -28,32 +32,91 @@ Input parse_input(const char* path)
         {
             if (input.grid[y][x] == 'S')
             {
-                input.pos = {int64_t(x), int64_t(y)};
-                return input;
+                input.start_pos = {uint32_t(x), uint32_t(y)};
+            }
+            else if (input.grid[y][x] == 'E')
+            {
+                input.end_pos = {uint32_t(x), uint32_t(y)};
             }
         }
     }
     return input;
 }
 
-int64_t move(const std::vector<std::string>& grid, std::vector<std::vector<bool>>& visited, const Position& position)
+char elevation(const std::vector<std::string>& grid, const Position& position)
 {
-
-}
-
-int64_t step1(const Input& input)
-{
-    std::vector<std::vector<bool>> visited(input.grid.size());
-    for (auto& v : visited)
+    char c = grid[position.y][position.x];
+    switch (c)
     {
-        v.resize(input.grid[0].size());
+    case 'S':
+        return 'a';
+    case 'E':
+        return 'z';
     }
-    visited[input.pos.y][input.pos.x] = true;
+    return c;
 }
 
-int64_t step2(const Input& input)
+bool is_valid(const std::vector<std::string>& grid, const Position& position)
 {
+    return position.x >= 0 && position.x < uint32_t(grid[0].size()) && position.y >= 0
+        && position.y < uint32_t(grid.size());
+}
+
+template <typename ELEVATION_TEST>
+uint32_t search(const Input& input, const Position& start, char end, ELEVATION_TEST elevation_test)
+{
+    std::vector<std::vector<uint32_t>> distances(input.grid.size());
+    for (auto& d : distances)
+    {
+        d.resize(input.grid[0].size(), UINT32_MAX);
+    }
+
+    distances[start.y][start.x] = 0;
+    std::deque<Position> q;
+    q.push_back(start);
+
+    while (!q.empty())
+    {
+        Position pos = q.front();
+        q.pop_front();
+        uint32_t d = distances[pos.y][pos.x];
+
+        if (input.grid[pos.y][pos.x] == end)
+        {
+            return d;
+        }
+
+        Position positions[] = {{pos.x - 1, pos.y}, {pos.x + 1, pos.y}, {pos.x, pos.y - 1}, {pos.x, pos.y + 1}};
+        for (const auto& next : positions)
+        {
+            if (is_valid(input.grid, next) && elevation_test(input, pos, next) && distances[next.y][next.x] > d + 1)
+            {
+                distances[next.y][next.x] = d + 1;
+                q.push_back(next);
+            }
+        }
+    }
     return 0;
+}
+
+bool elevation_test1(const Input& input, const Position& pos, const Position& next)
+{
+    return elevation(input.grid, next) <= elevation(input.grid, pos) + 1;
+}
+
+uint32_t step1(const Input& input)
+{
+    return search(input, input.start_pos, 'E', elevation_test1);
+}
+
+bool elevation_test2(const Input& input, const Position& pos, const Position& next)
+{
+    return elevation(input.grid, next) >= elevation(input.grid, pos) - 1;
+}
+
+uint32_t step2(const Input& input)
+{
+    return search(input, input.end_pos, 'a', elevation_test2);
 }
 
 int main()
