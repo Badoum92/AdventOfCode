@@ -1,8 +1,8 @@
 #include "common.h"
 
 const char* provided_paths[] = {"input/day14_provided"};
-uint64_t provided_expected1[] = {0};
-uint64_t provided_expected2[] = {0};
+uint64_t provided_expected1[] = {24};
+uint64_t provided_expected2[] = {93};
 
 const char* real_input = "input/day14";
 
@@ -16,15 +16,9 @@ struct Input
 {
     std::vector<std::vector<Position>> shapes;
     std::vector<std::vector<char>> grid;
-    std::vector<Position> sand;
     Position min = {UINT32_MAX, UINT32_MAX};
     Position max = {0, 0};
 };
-
-std::ostream& operator<<(std::ostream& os, const Position& pos)
-{
-    return os << "(" << pos.x << ", " << pos.y << ")";
-}
 
 Input parse_input(const char* path)
 {
@@ -46,10 +40,10 @@ Input parse_input(const char* path)
         }
     }
 
-    input.grid.resize(input.max.y + 1);
+    input.grid.resize(input.max.y + 3);
     for (auto& row : input.grid)
     {
-        row.resize(input.max.x + 1, '.');
+        row.resize(input.max.x * 2, '.');
     }
 
     for (const auto& shape : input.shapes)
@@ -68,34 +62,70 @@ Input parse_input(const char* path)
         }
     }
 
-    /* for (size_t y = 0; y < input.grid.size(); ++y)
-    {
-        for (size_t x = 0; x < input.grid[0].size(); ++x)
-        {
-            std::cout << input.grid[y][x];
-        }
-        std::cout << "\n";
-    }
-
-    std::cout << "min: " << input.min << "\n";
-    std::cout << "max: " << input.max << "\n"; */
-
     return input;
 }
 
-bool simulate(Input& input)
+bool simulate(Input& input, bool infinite_void)
 {
+    Position sand = {500, 0};
+    if (input.grid[sand.y][sand.x] == 'o')
+    {
+        return false;
+    }
 
+    for (;;)
+    {
+        if (infinite_void && (sand.x < input.min.x || sand.x > input.max.x || sand.y > input.max.y))
+        {
+            return false;
+        }
+        else if (input.grid[sand.y + 1][sand.x] == '.')
+        {
+            sand.y++;
+        }
+        else if (input.grid[sand.y + 1][sand.x - 1] == '.')
+        {
+            sand.y++;
+            sand.x--;
+        }
+        else if (input.grid[sand.y + 1][sand.x + 1] == '.')
+        {
+            sand.y++;
+            sand.x++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    input.grid[sand.y][sand.x] = 'o';
+    return true;
 }
 
 uint64_t step1(Input input)
 {
-    return 0;
+    uint64_t total = 0;
+    while (simulate(input, true))
+    {
+        total++;
+    }
+    return total;
 }
 
-uint64_t step2(const Input& input)
+uint64_t step2(Input input)
 {
-    return 0;
+    for (size_t x = 0; x < input.max.x * 2; ++x)
+    {
+        input.grid[input.max.y + 2][x] = '#';
+    }
+
+    uint64_t total = 0;
+    while (simulate(input, false))
+    {
+        total++;
+    }
+    return total;
 }
 
 int main()
