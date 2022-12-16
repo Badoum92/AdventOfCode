@@ -1,20 +1,63 @@
 #include "common.h"
 
-const char* provided_paths[] = {"input/day0_provided"};
-uint64_t provided_expected1[] = {0};
+#include <deque>
+
+const char* provided_paths[] = {"input/day16_provided"};
+uint64_t provided_expected1[] = {1651};
 uint64_t provided_expected2[] = {0};
 
-const char* real_input = "input/day0";
+const char* real_input = "input/day16";
 
-using Input = std::vector<std::string>;
+struct Input
+{
+    std::unordered_map<std::string, std::vector<std::string>> edges;
+    std::unordered_map<std::string, uint32_t> rates;
+};
 
 Input parse_input(const char* path)
 {
-    return input_to_lines(path);
+    Input input;
+    auto lines = input_to_lines(path);
+    for (const auto& line : lines)
+    {
+        char name[3];
+        uint32_t rate;
+        sscanf(line.c_str(), "Valve %s has flow rate=%u;", name, &rate);
+        input.rates[name] = rate;
+        auto line_split = split(split(line, "valves ")[1], ", ");
+        auto& edges = input.edges[name];
+        for (const auto& edge : line_split)
+        {
+            edges.push_back(edge);
+        }
+    }
+    return input;
 }
 
 uint64_t step1(const Input& input)
 {
+
+    uint64_t pressure = 0;
+    uint64_t pressure_add = 0;
+    std::deque<std::string> q;
+    q.push_back("AA");
+    std::unordered_set<std::string> opened;
+
+    while (!q.empty())
+    {
+        std::string node = q.front();
+        q.pop_front();
+
+        pressure += pressure_add;
+
+        for (const auto& edge : input.edges.at(node))
+        {
+
+        }
+
+
+    }
+
     return 0;
 }
 
