@@ -12,6 +12,8 @@
 #include <unordered_set>
 #include <fstream>
 #include <iostream>
+#include <bit>
+#include <bitset>
 
 template <typename F, typename... Args>
 inline auto time_function(const F& function, Args&&... args)

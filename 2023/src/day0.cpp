@@ -38,7 +38,7 @@ int main()
         }
     }
 
-    Input input = parse_input("input/day1");
+    Input input = parse_input("input/day0");
     auto [res1, time1] = time_function(step1, input);
     auto [res2, time2] = time_function(step2, input);
     std::cout << "\n=================================\n";
